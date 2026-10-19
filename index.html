@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Todo en Computadoras Perú</title>
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--tx:#1a1d23;--mut:#6b7280;--bd:#e3e5ea;--ac:#2563eb;--act:#fff;--ok:#15803d;--warn:#b45309;--bad:#b91c1c}
+@media (prefers-color-scheme:dark){:root{color-scheme:dark;--bg:#12141a;--card:#1c1f27;--tx:#eceef2;--mut:#9aa1ae;--bd:#2c303b;--ac:#5b8cff;--act:#0b1020;--ok:#4ade80;--warn:#fbbf24;--bad:#f87171}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.45 system-ui,sans-serif}
+header{background:var(--card);border-bottom:1px solid var(--bd);padding:14px 16px;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+h1{margin:0;font-size:1.2rem}h1 span{color:var(--ac)}main{max-width:1000px;margin:0 auto;padding:16px}
+button,input,select{font:inherit;color:var(--tx)}
+button{background:var(--ac);color:var(--act);border:0;border-radius:8px;padding:8px 14px;cursor:pointer}
+button.ghost{background:transparent;color:var(--tx);border:1px solid var(--bd)}button.del{background:transparent;color:var(--bad);border:1px solid var(--bd)}
+input,select{background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:8px 10px;min-width:0}
+.bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.bar input{flex:1 1 200px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
+.ph{aspect-ratio:4/3;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:3rem}.ph img{width:100%;height:100%;object-fit:contain}
+.bd{padding:12px;display:flex;flex-direction:column;gap:6px}.cat{font-size:.75rem;color:var(--mut);text-transform:uppercase}
+.name{font-weight:600}.price{font-size:1.3rem;font-weight:700}.tag{font-size:.8rem;font-weight:600}.ok{color:var(--ok)}.low{color:var(--warn)}.out{color:var(--bad)}
+.wa{text-align:center;text-decoration:none;background:var(--ok);color:var(--act);border-radius:8px;padding:8px;font-size:.9rem}
+.panel{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px;margin-bottom:16px}.panel h2{margin:0 0 10px;font-size:1rem}
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;align-items:end}
+.form label{font-size:.8rem;color:var(--mut);display:flex;flex-direction:column;gap:4px}
+.scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:640px}th,td{text-align:left;padding:8px;border-bottom:1px solid var(--bd)}th{font-size:.8rem;color:var(--mut)}
+td input[type=number]{width:100%;max-width:110px}.msg{color:var(--mut);padding:24px;text-align:center}
+dialog{background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:12px;max-width:560px;width:calc(100% - 24px);max-height:90vh;padding:16px}
+dialog::backdrop{background:rgba(0,0,0,.6)}
+textarea{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:8px 10px;width:100%;resize:vertical}
+.dph{aspect-ratio:4/3;background:var(--bg);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:4rem;margin-bottom:10px}.dph img{width:100%;height:100%;object-fit:contain}
+.sp{width:100%;border-collapse:collapse;min-width:0;margin:8px 0}.sp th{width:40%;color:var(--mut);font-weight:500}
+.row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}.row .wa{flex:1;padding:10px}
+.ef{display:grid;gap:8px}.ef label{font-size:.8rem;color:var(--mut);display:flex;flex-direction:column;gap:4px}
+</style>
+</head>
+<body>
+<header>
+  <h1>Todo en <span>Computadoras</span> Perú</h1>
+  <div><button class="ghost" id="btnAdmin">Administrador</button> <button class="ghost" id="btnOut" hidden>Cerrar sesión</button></div>
+</header>
+<main>
+  <div class="panel" id="login" hidden>
+    <h2>Ingreso de administrador</h2>
+    <div class="form">
+      <label>Correo<input id="em" type="email" autocomplete="username"></label>
+      <label>Contraseña<input id="pw" type="password" autocomplete="current-password"></label>
+      <button id="go">Ingresar</button>
+    </div>
+  </div>
+  <div id="admin" hidden>
+    <div class="panel">
+      <h2>Agregar producto</h2>
+      <div class="form">
+        <label>Nombre<input id="n"></label>
+        <label>Categoría<select id="c"></select></label>
+        <label>Precio (S/)<input id="p" type="number" min="0" step="0.01"></label>
+        <label>Stock<input id="s" type="number" min="0" step="1"></label>
+        <label>Foto<input id="img" type="file" accept="image/*"></label>
+        <button id="add">Agregar</button>
+      </div>
+    </div>
+    <div class="panel"><h2>Inventario</h2><div class="scroll"><table>
+      <thead><tr><th>Producto</th><th>Categoría</th><th>Precio (S/)</th><th>Stock</th><th>Foto</th><th></th></tr></thead>
+      <tbody id="tb"></tbody></table></div></div>
+  </div>
+  <div class="bar"><input id="q" type="search" placeholder="Buscar producto…"><select id="f"><option value="">Todas las categorías</option></select></div>
+  <div id="msg" class="msg">Cargando catálogo…</div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<dialog id="det"><div id="detBody"></div></dialog>
+<dialog id="edlg">
+  <h2 style="margin-top:0;font-size:1.05rem">Detalles del producto</h2>
+  <div class="ef">
+    <label>Nombre<input id="eName"></label>
+    <label>Categoría<select id="eCat"></select></label>
+    <label>Marca<input id="eBrand" placeholder="Lenovo, HP, Epson…"></label>
+    <label>Descripción<textarea id="eDesc" rows="3"></textarea></label>
+    <label>Especificaciones (una por línea, formato Clave: valor)<textarea id="eSpecs" rows="6" placeholder="Procesador: Intel Core i5&#10;Memoria RAM: 8 GB&#10;Almacenamiento: SSD 512 GB&#10;Garantía: 12 meses"></textarea></label>
+  </div>
+  <div class="row"><button id="eSave">Guardar</button><button class="ghost" id="eCancel">Cancelar</button></div>
+</dialog>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+/* ====== CONFIGURACIÓN: cambia solo estas 3 líneas ====== */
+const SUPABASE_URL="https://qhnlyfxuhvvakruhzcap.supabase.co";
+const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFobmx5Znh1aHZ2YWtydWh6Y2FwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzODg1NDMsImV4cCI6MjEwNzk2NDU0M30.DCe7t_LJy_XsTNyCbPVZxJopX07E4GOMpLh5L6hKvoE";
+const WHATSAPP="51943950279"; // código de país + número, sin + ni espacios
+/* ======================================================= */
+const CATS=["Laptops","PCs de escritorio","Monitores","Componentes","Impresoras","Accesorios"];
+const ICON={"Laptops":"💻","PCs de escritorio":"🖥️","Monitores":"🖵","Componentes":"🔧","Impresoras":"🖨️","Accesorios":"⌨️"};
+const $=id=>document.getElementById(id);
+const esc=t=>String(t??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+const money=v=>"S/ "+Number(v).toLocaleString("es-PE",{minimumFractionDigits:2,maximumFractionDigits:2});
+$("c").innerHTML=CATS.map(c=>`<option>${c}</option>`).join("");
+$("f").innerHTML+=CATS.map(c=>`<option>${c}</option>`).join("");
+let sb,items=[],logged=false,showLogin=false;
+
+function tag(s){return s<=0?'<span class="tag out">Agotado</span>':s<=3?`<span class="tag low">¡Últimas ${s} unidades!</span>`:'<span class="tag ok">En stock</span>'}
+function render(){
+  const q=$("q").value.toLowerCase(),f=$("f").value;
+  const list=items.filter(x=>(!f||x.category===f)&&x.name.toLowerCase().includes(q));
+  $("msg").hidden=list.length>0;if(!list.length)$("msg").textContent="No hay productos para mostrar.";
+  $("grid").innerHTML=list.map(x=>`<div class="card" data-open="${x.id}" style="cursor:pointer"><div class="ph">${x.image_url?`<img src="${esc(x.image_url)}" alt="${esc(x.name)}" loading="lazy">`:(ICON[x.category]||"📦")}</div>
+   <div class="bd"><div class="cat">${esc(x.category)}</div><div class="name">${esc(x.name)}</div><div class="price">${money(x.price)}</div>${tag(x.stock)}
+   <a class="wa" target="_blank" rel="noopener" href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Hola, quiero consultar por: "+x.name)}">Consultar por WhatsApp</a></div></div>`).join("");
+  $("login").hidden=!(showLogin&&!logged);$("admin").hidden=!logged;
+  $("btnAdmin").hidden=logged;$("btnOut").hidden=!logged;
+  if(logged)$("tb").innerHTML=items.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.category)}</td>
+   <td><input type="number" min="0" step="0.01" value="${x.price}" data-id="${x.id}" data-k="price"></td>
+   <td><input type="number" min="0" step="1" value="${x.stock}" data-id="${x.id}" data-k="stock"></td>
+   <td><input type="file" accept="image/*" data-img="${x.id}"></td>
+   <td><button class="ghost" data-edit="${x.id}">Detalles</button> <button class="del" data-del="${x.id}">Eliminar</button></td></tr>`).join("");
+}
+async function load(){
+  const {data,error}=await sb.from("products").select("*").order("name");
+  if(error){$("msg").hidden=false;$("msg").textContent="No se pudo cargar el catálogo.";return}
+  items=data;render();
+}
+async function upload(file){
+  if(!file)return null;
+  const path=Date.now()+"-"+file.name.replace(/[^\w.-]/g,"_");
+  const {error}=await sb.storage.from("products").upload(path,file);
+  if(error){alert("Error al subir la foto: "+error.message);return null}
+  return sb.storage.from("products").getPublicUrl(path).data.publicUrl;
+}
+const guard=async fn=>{try{await fn();await load()}catch(e){alert("Error: "+(e.message||e))}};
+
+$("q").oninput=render;$("f").onchange=render;
+$("eCat").innerHTML=CATS.map(c=>`<option>${c}</option>`).join("");
+const det=$("det"),edlg=$("edlg");let editId=null;
+det.onclick=e=>{if(e.target===det||e.target.dataset.close)det.close()};
+$("grid").onclick=e=>{
+  if(e.target.closest("a"))return;
+  const c=e.target.closest("[data-open]");if(!c)return;
+  const x=items.find(i=>i.id===c.dataset.open);if(!x)return;
+  const specs=(x.specs||"").split("\n").filter(l=>l.includes(":")).map(l=>{const i=l.indexOf(":");return `<tr><th>${esc(l.slice(0,i).trim())}</th><td>${esc(l.slice(i+1).trim())}</td></tr>`}).join("");
+  $("detBody").innerHTML=`<div class="dph">${x.image_url?`<img src="${esc(x.image_url)}" alt="${esc(x.name)}">`:(ICON[x.category]||"📦")}</div>
+   <div class="cat">${esc(x.category)}${x.brand?" · "+esc(x.brand):""}</div><div class="name" style="font-size:1.15rem">${esc(x.name)}</div>
+   <div class="price">${money(x.price)}</div>${tag(x.stock)}
+   ${x.description?`<p style="white-space:pre-line">${esc(x.description)}</p>`:""}
+   ${specs?`<table class="sp">${specs}</table>`:""}
+   <div class="row"><a class="wa" target="_blank" rel="noopener" href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent("Hola, quiero consultar por: "+x.name)}">Consultar por WhatsApp</a><button class="ghost" data-close="1">Cerrar</button></div>`;
+  det.showModal();
+};
+$("eCancel").onclick=()=>edlg.close();
+$("eSave").onclick=()=>guard(async()=>{
+  const name=$("eName").value.trim();if(!name)throw new Error("El nombre no puede estar vacío.");
+  const {error}=await sb.from("products").update({name,category:$("eCat").value,brand:$("eBrand").value.trim(),description:$("eDesc").value.trim(),specs:$("eSpecs").value.trim()}).eq("id",editId);
+  if(error)throw error;edlg.close();
+});
+$("btnAdmin").onclick=()=>{showLogin=true;render()};
+$("btnOut").onclick=()=>sb.auth.signOut();
+$("go").onclick=async()=>{
+  const {error}=await sb.auth.signInWithPassword({email:$("em").value.trim(),password:$("pw").value});
+  if(error)alert("Correo o contraseña incorrectos");
+};
+$("add").onclick=()=>guard(async()=>{
+  const name=$("n").value.trim(),price=parseFloat($("p").value),stock=parseInt($("s").value,10);
+  if(!name||isNaN(price)||isNaN(stock)||price<0||stock<0)throw new Error("Completa nombre, precio y stock válidos.");
+  const image_url=await upload($("img").files[0]);
+  const {error}=await sb.from("products").insert({name,category:$("c").value,price,stock,image_url});
+  if(error)throw error;["n","p","s","img"].forEach(i=>$(i).value="");
+});
+$("tb").onchange=e=>{
+  const t=e.target;
+  guard(async()=>{
+    if(t.dataset.img){const url=await upload(t.files[0]);if(!url)return;
+      const {error}=await sb.from("products").update({image_url:url}).eq("id",t.dataset.img);if(error)throw error;return}
+    const v=parseFloat(t.value);if(!t.dataset.id||isNaN(v)||v<0)return;
+    const {error}=await sb.from("products").update({[t.dataset.k]:t.dataset.k==="stock"?Math.floor(v):v}).eq("id",t.dataset.id);if(error)throw error;
+  });
+};
+$("tb").onclick=e=>{
+  const eid=e.target.dataset.edit;
+  if(eid){const x=items.find(i=>i.id===eid);if(!x)return;editId=eid;
+    $("eName").value=x.name;$("eCat").value=x.category;$("eBrand").value=x.brand||"";$("eDesc").value=x.description||"";$("eSpecs").value=x.specs||"";edlg.showModal();return}
+  const id=e.target.dataset.del;if(id&&confirm("¿Eliminar este producto?"))guard(async()=>{const {error}=await sb.from("products").delete().eq("id",id);if(error)throw error})};
+
+if(SUPABASE_URL.startsWith("PEGA")){$("msg").textContent="Falta configurar Supabase (ver instrucciones)."}
+else{
+  sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+  sb.auth.onAuthStateChange((_e,session)=>{logged=!!session;render()});
+  load();
+}
+</script>
+</body>
+</html>
