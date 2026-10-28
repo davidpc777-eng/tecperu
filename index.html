@@ -27,7 +27,7 @@ input,select{background:var(--card);border:1px solid var(--bd);border-radius:8px
 .bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.bar input{flex:1 1 200px}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
 .card{background:var(--card);border:1px solid var(--bd);border-radius:12px;overflow:hidden;display:flex;flex-direction:column}
-.ph{aspect-ratio:4/3;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:3rem}.ph img{width:100%;height:100%;object-fit:contain}
+.ph{aspect-ratio:4/3;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:3rem;position:relative;overflow:hidden}.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .bd{padding:12px;display:flex;flex-direction:column;gap:6px;flex:1}.bd>.wa{margin-top:auto}.cat{font-size:.75rem;color:var(--mut);text-transform:uppercase}
 .name{font-weight:600}.price{font-size:1.3rem;font-weight:700}.tag{font-size:.8rem;font-weight:600}.ok{color:var(--ok)}.low{color:var(--warn)}.out{color:var(--bad)}
 .wa{text-align:center;text-decoration:none;background:var(--ok);color:var(--act);border-radius:8px;padding:8px;font-size:.9rem}
@@ -39,7 +39,7 @@ td input[type=number]{width:100%;max-width:110px}.msg{color:var(--mut);padding:2
 dialog{background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:12px;max-width:560px;width:calc(100% - 24px);max-height:90vh;padding:16px}
 dialog::backdrop{background:rgba(0,0,0,.6)}
 textarea{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--bd);border-radius:8px;padding:8px 10px;width:100%;resize:vertical}
-.dph{aspect-ratio:4/3;background:var(--bg);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:4rem;margin-bottom:10px}.dph img{width:100%;height:100%;object-fit:contain}
+.dph{aspect-ratio:4/3;background:var(--bg);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:4rem;margin-bottom:10px;position:relative;overflow:hidden}.dph img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .sp{width:100%;border-collapse:collapse;min-width:0;margin:8px 0}.sp th{width:40%;color:var(--mut);font-weight:500}
 .row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}.row .wa{flex:1;padding:10px}
 .ef{display:grid;gap:8px}.ef label{font-size:.8rem;color:var(--mut);display:flex;flex-direction:column;gap:4px}
@@ -99,7 +99,6 @@ textarea{font:inherit;color:var(--tx);background:var(--card);border:1px solid va
 /* ====== CONFIGURACIÓN: cambia solo estas 3 líneas ====== */
 const SUPABASE_URL="https://qhnlyfxuhvvakruhzcap.supabase.co";
 const SUPABASE_KEY="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFobmx5Znh1aHZ2YWtydWh6Y2FwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTIzODg1NDMsImV4cCI6MjEwNzk2NDU0M30.DCe7t_LJy_XsTNyCbPVZxJopX07E4GOMpLh5L6hKvoE";
-
 const WHATSAPP="51943950279"; // código de país + número, sin + ni espacios
 /* ======================================================= */
 const CATS=["Laptops","PCs de escritorio","Monitores","Componentes","Impresoras","Accesorios"];
